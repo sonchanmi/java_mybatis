@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ohgiraffers.section01.xml.DynamicSqlMapper">
+    <resultMap id="menuResultMap" type="com.ohgiraffers.common.MenuDTO">
+        <id property="code" column="MENU_CODE"/>
+        <result property="name" column="MENU_NAME"/>
+        <result property="price" column="MENU_PRICE"/>
+        <result property="categoryCode" column="CATEGORY_CODE"/>
+        <result property="orderableStatus" column="ORDERABLE_STATUS"/>
+    </resultMap>
+
+    <select id="selectMenuByPrice" parameterType="hashMap" resultMap="menuResultMap">
+        SELECT
+             A.MENU_CODE,
+             A.MENU_NAME,
+             A.MENU_PRICE,
+             A.CATEGORY_CODE,
+             A.ORDERABLE_STATUS
+          FROM TBL_MENU A
+         WHERE A.ORDERABLE_STATUS = 'Y'
+        <if test="price gte 0 and price lte 10000">
+<!--            price 0 이상인 것 , price가 10000 이하인것 gta 이상/lite 이하 , 꺽쇄는 문자열로 인식해서 못 넣음-->
+            <![CDATA[
+              AND A.MENU_PRICE < #{ price}
+              ]]>
+            <!--등호로 비교 해줄 때에는 ![CDATA[ 써줌-->
+        </if>
+        <if test="price gt 10000 and price lte 20000">
+            AND A.MENU_PRICE BETWEEN 10000 AND #{ price }
+        </if>
+        <if test="price gt 20000 and price lte 30000">
+        AND A.MENU_PRICE BETWEEN 20000 AND #{ price }
+        </if>
+        <if test="price gt 30000">
+            AND A.MENU_PRICE BETWEEN 30000 AND #{ price }
+        </if>
+    </select>
+
+    <select id="searchMenu" parameterType="SearchCriteria" resultMap="menuResultMap">
+        SELECT
+          A.MENU_CODE,
+          A.MENU_NAME,
+          A.MENU_PRICE,
+         A.CATEGORY_CODE,
+         A.ORDERABLE_STATUS
+        FROM TBL_MENU A
+        <if test="condition == 'category'">
+            JOIN TBL_CATEGORY B ON (A.CATEGORY_CODE = B. CATEGORY_CODE)
+        </if>
+         WHERE A.ORDERABLE_STATUS = 'Y'
+        <if test="condition == 'name'">
+            AND A.MENU_NAME LIKE CONCAT('%', #{value}, '%' )
+        </if>
+        <if test="condition == 'category'">
+             AND B.CATEGORY_NAME = #{ value }
+        </if>
+    </select>
+
+</mapper>

@@ -1,14 +1,14 @@
-package com.ohgiraffers.section01.xmlconfig.controller;
+package com.ohgiraffers.section03.remix.controller;
 
 import com.ohgiraffers.common.PrintResult;
 import com.ohgiraffers.dto.MenuDTO;
-import com.ohgiraffers.section01.xmlconfig.service.MenuService;
+import com.ohgiraffers.section03.remix.service.MenuService;
+
 
 import java.util.List;
 import java.util.Map;
 
 public class MenuController {
-
     private final PrintResult printResult;
 
     private final MenuService menuService;
@@ -19,50 +19,57 @@ public class MenuController {
     }
 
 
-
-
     public void selectAllMenu() {
 
-        List<MenuDTO> menuList= menuService.selectAllMenu();
+        List<MenuDTO> menuList = menuService.selectAllMenu();
 
-          printResult.printMenuList(menuList);
+        printResult.printMenuList(menuList);
+
+
     }
 
     public void selectMenuByCode(Map<String, String> parameter) {
 
-        int code= Integer.parseInt(parameter.get("code"));
+        int code = Integer.parseInt(parameter.get("code"));
 
         MenuDTO menu = menuService.selectMenuByCode(code);
 
         printResult.printMenu(menu);
-
     }
-
 
     public void registMenu(Map<String, String> parameter) {
 
-        MenuDTO menu = new MenuDTO();
-        menu.setName(parameter.get("name"));
-        menu.setPrice(Integer.parseInt(parameter.get("price")));
-        menu.setCategoryCode(Integer.parseInt(parameter.get("categoryCode")));
+        String name = parameter.get("name");
+        int price = Integer.parseInt(parameter.get("price"));
+        int categoryCode = Integer.parseInt(parameter.get("categoryCode"));
 
-        if(menuService.registMenu(menu)){
-            // 메뉴등록이 성공했을 때 동작
+        MenuDTO menu = new MenuDTO();
+        menu.setName(name);
+        menu.setPrice(price);
+        menu.setCategoryCode(categoryCode);
+
+        if (menuService.registMenu(menu)){
             printResult.printSuccessMessage("insert");
         }else{
-            //메뉴 동작이 실패했을 때 동작
             printResult.printErrorMessage("insert");
         }
+
 
     }
 
     public void modifyMenu(Map<String, String> parameter) {
 
+        int code = Integer.parseInt(parameter.get("code"));
+        String name = parameter.get("name");
+        int price = Integer.parseInt(parameter.get("price"));
+        int categoryCode = Integer.parseInt(parameter.get("categoryCode"));
+
+
         MenuDTO menu = new MenuDTO();
-        menu.setCode(Integer.parseInt(parameter.get("code")));
-        menu.setName(parameter.get("name"));
-        menu.setPrice(Integer.parseInt(parameter.get("price")));
-        menu.setCategoryCode(Integer.parseInt(parameter.get("categoryCode")));
+        menu.setCode(code);
+        menu.setName(name);
+        menu.setPrice(price);
+        menu.setCategoryCode(categoryCode);
 
 
         if(menuService.modifyMenu(menu)){
@@ -73,21 +80,17 @@ public class MenuController {
 
     }
 
-
-    public void deleteMenu(Map<String,String> parameter){
+    public void deleteMenu(Map<String, String> parameter) {
 
         int code = Integer.parseInt(parameter.get("code"));
 
-        if(menuService.deleteMenu(code)){
+
+        if (menuService.deleteMenu(code)){
             printResult.printSuccessMessage("delete");
-        }else {
+        }else{
             printResult.printErrorMessage("delete");
         }
 
 
     }
-
-
-
-
 }
