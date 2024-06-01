@@ -66,34 +66,27 @@ public class Application {
 
     }
 
-    private static Map<String, String> inputMenuCdoe() {
-
-        System.out.println("메뉴 코드를 입력 해주세요 : ");
-        String code = scr.nextLine();
-
-        Map<String, String> parameter = new HashMap<>();
-        parameter.put("code", code);
-
-        return parameter;
-    }
-
     private static Map<String, String> inputMenu() {
-        System.out.println("추가할 메뉴의 이름을 입력 해주세요");
+
+
+        System.out.println("메뉴 이름을 입력 해주세요 : ");
         String name = scr.nextLine();
-        System.out.println("메뉴 가격을 입력 해주세요");
+        System.out.println("메뉴 가격을 입력 해주세요 : ");
         String price = scr.nextLine();
-        System.out.println("카테고리 코드를 입력 해주세요");
+        System.out.println("카테고리 코드를 입력 해주세요 : ");
         String categoryCode = scr.nextLine();
 
+        Map<String,String> parameter = new HashMap<>();
+        parameter.put("name",name);
+        parameter.put("price",price);
+        parameter.put("categoryCode",categoryCode);
 
-        Map<String, String> parameter = new HashMap<>();
-        parameter.put("name", name);
-        parameter.put("price", price);
-        parameter.put("categoryCode", categoryCode);
 
         return parameter;
-
     }
+
+
+
     private static Map<String, String> inputModifyMenu() {
         System.out.println("수정할 메뉴의 코드를 입력 해주세요");
         String code = scr.nextLine();

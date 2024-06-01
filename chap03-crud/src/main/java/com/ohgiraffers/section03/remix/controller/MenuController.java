@@ -21,7 +21,7 @@ public class MenuController {
 
     public void selectAllMenu() {
 
-        List<MenuDTO> menuList = menuService.selectAllMenu();
+        List<MenuDTO> menuList = menuService. selectAllMenu();
 
         printResult.printMenuList(menuList);
 
